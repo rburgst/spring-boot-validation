@@ -1,6 +1,8 @@
 package com.example.springbootvalidation.club;
 
+import com.example.springbootvalidation.util.KeyGenerator;
 import com.example.springbootvalidation.util.TsidUtil;
+import io.github.thibaultmeyer.cuid.CUID;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -28,7 +30,7 @@ import java.util.Objects;
 @AllArgsConstructor
 public class Club {
     @Id
-    Long id;
+    String id;
 
     @Column
     @NotBlank
@@ -42,7 +44,7 @@ public class Club {
     String managerEmail;
 
     public Club(String clubName, String managerEmail) {
-        this.id = TsidUtil.getUniqueId();
+        id = KeyGenerator.next();
         this.clubName = clubName;
         this.managerEmail = managerEmail;
     }
@@ -50,7 +52,7 @@ public class Club {
     @PrePersist
     public void prePersist() {
         if (id == null) {
-            id = TsidUtil.getUniqueId();
+            id = KeyGenerator.next();
         }
     }
 

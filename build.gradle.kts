@@ -24,6 +24,7 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-data-rest")
     implementation("org.springframework.boot:spring-boot-starter-validation")
     implementation("com.github.f4b6a3:tsid-creator:5.0.2")
+    implementation("com.github.f4b6a3:ulid-creator:5.1.0")
 
     compileOnly("org.projectlombok:lombok")
     runtimeOnly("com.h2database:h2")
