@@ -20,3 +20,10 @@ form.
     pnpm dev
     ```
 3. Open the browser at http://localhost:5173
+4. build/run the svelte dev server via
+   ```
+   cs client-svelte
+   pnpm install
+   pnpm dev
+   ```
+5. Open the browser at http://localhost:5173
