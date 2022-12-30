@@ -2,7 +2,6 @@ package com.example.springbootvalidation.club;
 
 import com.example.springbootvalidation.util.KeyGenerator;
 import com.example.springbootvalidation.util.TsidUtil;
-import io.github.thibaultmeyer.cuid.CUID;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;

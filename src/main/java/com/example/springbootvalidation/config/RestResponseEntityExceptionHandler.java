@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import java.net.URI;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -26,6 +27,7 @@ class RestResponseEntityExceptionHandler extends
                 .forEach(constraintViolation -> errs.put(constraintViolation.getPropertyPath().toString(), Map.of("message", constraintViolation.getMessage())));
         ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, "validation failed");
         problemDetail.setProperty("errors", errs);
+        problemDetail.setType(URI.create("https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/400"));
         return ResponseEntity.badRequest().body(problemDetail);
     }
 
