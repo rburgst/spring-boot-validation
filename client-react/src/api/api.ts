@@ -16,18 +16,18 @@ export interface ClubsResponse {
 export async function fetchClubs(
   pageNum: number,
   pageSize: number,
-  sort?: SortCriterium<ClubSort>,
+  sort?: ClubSort,
+  dir?: 'asc' | 'desc',
   filter?: any
 ) {
+  console.log('fetching clubs', { pageNum, pageSize, sort, dir })
   const queryParams = new URLSearchParams()
   queryParams.append('size', `${pageSize}`)
   queryParams.append('page', `${pageNum}`)
   if (sort) {
-    const sortColumn = sort[0]
-    const direction = sort[1]
-    queryParams.append('sort', `${sortColumn},${direction}`)
+    queryParams.append('sort', `${sort},${dir}`)
   }
-  const result = await fetch('/api/clubs')
+  const result = await fetch(`/api/clubs?${queryParams.toString()}`)
   return await extractJsonOrError<ClubsResponse>(result)
 }
 

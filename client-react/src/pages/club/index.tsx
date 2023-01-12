@@ -1,61 +1,58 @@
 import React, { FC, useState } from 'react'
 // import {Club} from '../model/model'
 // import {fetchClubs} from '../api/api'
-import { useRouter } from '@tanstack/react-router'
+import { useMatch, useRouter } from '@tanstack/react-router'
 import { useQuery } from 'react-query'
 import { fetchClubs } from '../../api/api'
 import { Column } from 'primereact/column'
 import { DataTable } from 'primereact/datatable'
 import { Message } from 'primereact/message'
-import { Club, ClubSort, SortCriterium } from '../../model/model'
+import { Club, ClubSort } from '../../model/model'
+import { clubsRoute } from '../../main'
 
-function useClubsQuery(
-  pageInfo: PagingInfo,
-  sort?: SortCriterium<ClubSort>,
-  filter?: any
-) {
+function useClubsQuery(search: {
+  sort: string
+  pageNum: number
+  pageSize: number
+  dir: 'asc' | 'desc'
+}) {
   return useQuery({
-    queryKey: ['clubs', { sort: sort, filter: filter, pageInfo }],
+    queryKey: ['clubs', search],
     queryFn: ctx => {
       const queryParams = ctx.queryKey[1]
       if (typeof queryParams !== 'object') {
         throw new Error('invalid query params')
       }
       return fetchClubs(
-        queryParams.pageInfo.pageNum,
-        queryParams.pageInfo.pageSize,
-        queryParams.sort,
-        queryParams.filter
+        queryParams.pageNum,
+        queryParams.pageSize,
+        queryParams.sort as ClubSort,
+        queryParams.dir
       )
     },
   })
 }
-
-interface PagingInfo {
-  pageNum: number
-  pageSize: number
-}
-
 const rowsPerPageOptions = [2, 5, 10, 20]
 
 export const ClubListPage: FC = () => {
-  const [sort, setSort] = useState<SortCriterium<ClubSort>>(['clubName', 'asc'])
-  const [pageInfo, setPageInfo] = useState<PagingInfo>({
-    pageNum: 0,
-    pageSize: 5,
-  })
+  const { search, navigate } = useMatch(clubsRoute.id)
 
-  const { data, error, isLoading } = useClubsQuery(pageInfo, sort)
+  const { data, error, isLoading } = useClubsQuery(search)
   const clubs = data?._embedded?.clubs
   const [selectedClub, setSelectedClub] = useState<Club | undefined>(undefined)
   const router = useRouter()
-  console.log('got club list', data, sort)
+  console.log('got club list', data, search)
+  const rows = search.pageSize
+  const first =
+    (data?.page?.number ?? 0) * (data?.page?.size ?? search.pageSize)
+  console.log('render club list', { rows, first })
   return (
     <div>
       <>
         <h3>Clubs List!</h3>
         {error && <Message severity={'error'}>{JSON.stringify(error)}</Message>}
         <DataTable
+          lazy={true}
           value={clubs}
           responsiveLayout="scroll"
           loading={isLoading}
@@ -70,19 +67,33 @@ export const ClubListPage: FC = () => {
           }}
           onSort={e => {
             console.log('sort changed', e)
-            setSort([
-              e.sortField as ClubSort,
-              e.sortOrder === 1 ? 'asc' : 'desc',
-            ])
+            // FIXME navigate alone does not seem to work in newer versions than tanstack router beta35, see
+            // https://github.com/TanStack/router/issues/479
+            navigate({
+              to: clubsRoute.id,
+              search: {
+                ...search,
+                sort: e.sortField,
+                dir: e.sortOrder === 1 ? 'asc' : 'desc',
+              },
+            }).catch(err => {
+              console.error('navigate caught exception', err)
+            })
+          }}
+          onPage={e => {
+            console.log('onPage')
+            navigate({
+              to: clubsRoute.id,
+              search: { ...search, pageNum: e.page, pageSize: e.rows },
+            })
           }}
           paginator={true}
-          rows={data?.page?.totalElements}
+          rows={rows}
           rowsPerPageOptions={rowsPerPageOptions}
-          first={
-            (data?.page?.number ?? 0) * (data?.page?.size ?? pageInfo.pageSize)
-          }
-          sortField={sort[0]}
-          sortOrder={sort[1] === 'asc' ? 1 : -1}
+          totalRecords={data?.page.totalElements ?? 0}
+          first={first}
+          sortField={search.sort}
+          sortOrder={search.dir === 'asc' ? 1 : -1}
           dataKey="id"
         >
           <Column field="id" header="ID"></Column>

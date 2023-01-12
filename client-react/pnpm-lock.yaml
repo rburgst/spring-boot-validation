@@ -2,7 +2,7 @@ lockfileVersion: 5.4
 
 specifiers:
   '@hookform/resolvers': ^2.9.10
-  '@tanstack/react-router': 0.0.1-beta.38
+  '@tanstack/react-router': 0.0.1-beta.35
   '@types/react': ^18.0.26
   '@types/react-dom': ^18.0.9
   '@vitejs/plugin-react': ^3.0.0
@@ -20,7 +20,7 @@ specifiers:
 
 dependencies:
   '@hookform/resolvers': 2.9.10_react-hook-form@7.41.1
-  '@tanstack/react-router': 0.0.1-beta.38_biqbaboplfbrettd7655fr4n2y
+  '@tanstack/react-router': 0.0.1-beta.35_biqbaboplfbrettd7655fr4n2y
   primeicons: 6.0.1
   primereact: 8.7.3_lo6y2nk5wph5lsqjo2clngsniu
   react: 18.2.0
@@ -518,22 +518,22 @@ packages:
       '@jridgewell/sourcemap-codec': 1.4.14
     dev: true
 
-  /@tanstack/react-router/0.0.1-beta.38_biqbaboplfbrettd7655fr4n2y:
-    resolution: {integrity: sha512-i/pKuHZLwwB3bmP+Ty8bJtGfitrVNaYGbwtXtTw/jqhm6rXN6fd14jT4yW4XcktecSoWE6QK0yTE7viqdaEGuQ==}
+  /@tanstack/react-router/0.0.1-beta.35_biqbaboplfbrettd7655fr4n2y:
+    resolution: {integrity: sha512-QCZORzGW6/HraJ4iN6OJV9cIw1Hq/fEwTDbD1f8aNGm+fsI+pXq6MRowVf1sISNk5oZTTxW6RAtmkY9kDUfFcw==}
     engines: {node: '>=12'}
     peerDependencies:
       react: '>=16'
       react-dom: '>=16'
     dependencies:
       '@babel/runtime': 7.20.7
-      '@tanstack/router-core': 0.0.1-beta.36_biqbaboplfbrettd7655fr4n2y
+      '@tanstack/router-core': 0.0.1-beta.35_biqbaboplfbrettd7655fr4n2y
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
       use-sync-external-store: 1.2.0_react@18.2.0
     dev: false
 
-  /@tanstack/router-core/0.0.1-beta.36_biqbaboplfbrettd7655fr4n2y:
-    resolution: {integrity: sha512-debjgkz4v1b0BqgEOaaBN9GVPHibB9IdURa8sE62YZ6xCRfmwPkglxwqx9zbOm1qGBG0edJy2FhXuI0meAHHzQ==}
+  /@tanstack/router-core/0.0.1-beta.35_biqbaboplfbrettd7655fr4n2y:
+    resolution: {integrity: sha512-1QoKk8gKOn7e6BCWxp0rGAvjzD8EqHxvHuxvxxSGJoJwpJ2iKEqi/hOyh44a+eDYqGjNbvPB72ty0U6ksf0DLg==}
     engines: {node: '>=12'}
     peerDependencies:
       react: '>=16'

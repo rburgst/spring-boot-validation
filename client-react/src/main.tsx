@@ -13,6 +13,7 @@ import { ClubEditPage } from './pages/club/edit'
 import { IndexPage } from './pages'
 import { QueryClient, QueryClientProvider } from 'react-query'
 import { ReactQueryDevtools } from 'react-query/devtools'
+import { z } from 'zod'
 
 export const rootRoute = createRouteConfig({
   component: RootLayout,
@@ -22,15 +23,24 @@ const homeRoute = rootRoute.createRoute({
   path: '/',
   component: IndexPage,
 })
-const clubsRoute = rootRoute.createRoute({
+export const clubsRoute = rootRoute.createRoute({
   path: '/clubs',
   component: ClubListPage,
+  validateSearch: searchObj =>
+    z
+      .object({
+        pageNum: z.number().optional().default(0),
+        pageSize: z.number().optional().default(5),
+        sort: z.string().optional().default('clubName'),
+        dir: z.enum(['asc', 'desc']).optional().default('asc'),
+      })
+      .parse(searchObj),
 })
-const clubRoute = rootRoute.createRoute({
+export const clubRoute = rootRoute.createRoute({
   path: '/clubs/$clubId',
   component: ClubPage,
 })
-const clubEditRoute = rootRoute.createRoute({
+export const clubEditRoute = rootRoute.createRoute({
   path: '/clubs/$clubId/edit',
   component: ClubEditPage,
 })
