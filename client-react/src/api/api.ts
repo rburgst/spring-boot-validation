@@ -1,8 +1,52 @@
-import { Club } from '../model/model'
+import { Club, ClubSort, SortCriterium } from '../model/model'
+import { useQuery } from 'react-query'
 
-export async function fetchClubs() {
+export interface PageResponseInfo {
+  size: number
+  totalElements: number
+  totalPages: number
+  number: number
+}
+export interface ClubsResponse {
+  _embedded: {
+    clubs: Club[]
+  }
+  page: PageResponseInfo
+}
+
+export interface PagingInfo {
+  pageNum: number
+  pageSize: number
+}
+
+export function useClubsQuery(
+  pageInfo: PagingInfo,
+  sort?: SortCriterium<ClubSort>,
+  filter?: any
+) {
+  return useQuery({
+    queryKey: ['clubs', { sort: sort, filter: filter, pageInfo }],
+    queryFn: ctx =>
+      fetchClubs(pageInfo.pageNum, pageInfo.pageSize, sort, filter),
+  })
+}
+
+export async function fetchClubs(
+  pageNum: number,
+  pageSize: number,
+  sort?: SortCriterium<ClubSort>,
+  filter?: any
+) {
+  const queryParams = new URLSearchParams()
+  queryParams.append('size', `${pageSize}`)
+  queryParams.append('page', `${pageNum}`)
+  if (sort) {
+    const sortColumn = sort[0]
+    const direction = sort[1]
+    queryParams.append('sort', `${sortColumn},${direction}`)
+  }
   const result = await fetch('/api/clubs')
-  return (await extractJsonOrError<any>(result))._embedded.clubs as Club[]
+  return await extractJsonOrError<ClubsResponse>(result)
 }
 
 async function extractJsonOrError<T>(result: Response): Promise<T> {
