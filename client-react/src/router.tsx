@@ -1,10 +1,10 @@
 import { RootLayout } from './routes/root'
 import { IndexPage } from './routes'
-import { ClubListPage } from './routes/club'
-import { z } from 'zod'
+import { ClubListPage, ClubPageSearchParams } from './routes/club'
 import { ClubPage } from './routes/club/club'
 import { ClubEditPage } from './routes/club/edit'
 import { ReactRouter, RootRoute, Route } from '@tanstack/react-router'
+import { z } from 'zod'
 
 export const rootRoute = new RootRoute({
   component: RootLayout,
@@ -19,7 +19,9 @@ export const clubsRoute = new Route({
   getParentRoute: () => rootRoute,
   path: '/clubs',
   component: ClubListPage,
+  validateSearch: searchObj => ClubPageSearchParams.parse(searchObj),
 })
+
 export const clubRoute = new Route({
   getParentRoute: () => rootRoute,
   path: '/clubs/$clubId',

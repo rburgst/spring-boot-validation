@@ -7,6 +7,7 @@ export interface PageResponseInfo {
   totalPages: number
   number: number
 }
+
 export interface ClubsResponse {
   _embedded: {
     clubs: Club[]
@@ -14,20 +15,15 @@ export interface ClubsResponse {
   page: PageResponseInfo
 }
 
-export interface PagingInfo {
-  pageNum: number
-  pageSize: number
-}
-
 export function useClubsQuery(
-  pageInfo: PagingInfo,
+  pageNum: number,
+  pageSize: number,
   sort?: SortCriterium<ClubSort>,
   filter?: any
 ) {
   return useQuery({
-    queryKey: ['clubs', { sort: sort, filter: filter, pageInfo }],
-    queryFn: ctx =>
-      fetchClubs(pageInfo.pageNum, pageInfo.pageSize, sort, filter),
+    queryKey: ['clubs', { sort, filter, pageNum, pageSize }],
+    queryFn: () => fetchClubs(pageNum, pageSize, sort, filter),
   })
 }
 
@@ -35,17 +31,17 @@ export async function fetchClubs(
   pageNum: number,
   pageSize: number,
   sort?: SortCriterium<ClubSort>,
-  filter?: any
+  _filter?: any
 ) {
+  const sortField = sort?.[0]
+  const dir = sort?.[1]
   const queryParams = new URLSearchParams()
   queryParams.append('size', `${pageSize}`)
   queryParams.append('page', `${pageNum}`)
   if (sort) {
-    const sortColumn = sort[0]
-    const direction = sort[1]
-    queryParams.append('sort', `${sortColumn},${direction}`)
+    queryParams.append('sort', `${sortField},${dir}`)
   }
-  const result = await fetch('/api/clubs')
+  const result = await fetch(`/api/clubs?${queryParams.toString()}`)
   return await extractJsonOrError<ClubsResponse>(result)
 }
 
@@ -57,8 +53,7 @@ async function extractJsonOrError<T>(result: Response): Promise<T> {
     console.error('error extracting error body', e)
   }
   if (!result.ok) {
-    const error = new Error('Network response was not ok', { cause: body })
-    throw error
+    throw new Error('Network response was not ok', { cause: body })
   }
   return body as T
 }

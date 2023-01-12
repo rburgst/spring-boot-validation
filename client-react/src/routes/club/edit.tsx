@@ -1,5 +1,5 @@
 import React, { FC, ReactNode, useCallback, useRef, useState } from 'react'
-import { useMatch, useParams } from '@tanstack/react-router'
+import { useMatch } from '@tanstack/react-router'
 import { useMutation, useQuery } from 'react-query'
 import { fetchClub, updateClub } from '../../api/api'
 import { useForm } from 'react-hook-form'
@@ -14,7 +14,8 @@ import { Toast } from 'primereact/toast'
 import { clubEditRoute } from '../../router'
 
 export const ClubEditPage: FC = () => {
-  const { clubId } = useParams({ from: clubEditRoute.id })
+  const { params } = useMatch({ from: clubEditRoute.id })
+  const { clubId } = params
   const { data } = useQuery(
     ['clubs', clubId],
     () => fetchClub(clubId ?? 'N/A'),
@@ -32,7 +33,7 @@ export const ClubEditPage: FC = () => {
     undefined
   )
 
-  const toastRef = useRef<Toast>()
+  const toastRef = useRef<Toast>(null)
   const mutation = useMutation(updateClub, {
     onMutate: _variables => {
       setServerErrors(undefined)
