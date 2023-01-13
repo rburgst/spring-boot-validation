@@ -11,6 +11,10 @@
   "dependencies": {
     "@hookform/resolvers": "^2.9.10",
     "@tanstack/react-router": "0.0.1-beta.35",
+    "@ui5/webcomponents": "^1.9.3",
+    "@ui5/webcomponents-fiori": "^1.9.3",
+    "@ui5/webcomponents-icons": "^1.9.3",
+    "@ui5/webcomponents-react": "^1.7.1",
     "primeicons": "^6.0.1",
     "primereact": "^8.7.3",
     "react": "^18.2.0",
