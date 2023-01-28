@@ -1,4 +1,4 @@
-import { createRouteConfig, Link, Outlet } from '@tanstack/react-router'
+import { Link, Outlet } from '@tanstack/react-router'
 import React, { FC } from 'react'
 import styles from './root.module.scss'
 
