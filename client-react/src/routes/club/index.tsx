@@ -1,14 +1,14 @@
 import React, { FC, useState } from 'react'
 // import {Club} from '../model/model'
 // import {fetchClubs} from '../api/api'
-import { useMatch, useRouter } from '@tanstack/react-router'
 import { useQuery } from 'react-query'
 import { fetchClubs } from '../../api/api'
 import { Column } from 'primereact/column'
 import { DataTable } from 'primereact/datatable'
 import { Message } from 'primereact/message'
 import { Club, ClubSort } from '../../model/model'
-import { clubsRoute } from '../../main'
+import { useNavigate, useRouter, useSearch } from '@tanstack/react-router'
+import { clubsRoute } from '../../router'
 
 function useClubsQuery(search: {
   sort: string
@@ -35,7 +35,8 @@ function useClubsQuery(search: {
 const rowsPerPageOptions = [2, 5, 10, 20]
 
 export const ClubListPage: FC = () => {
-  const { search, navigate } = useMatch(clubsRoute.id)
+  const navigate = useNavigate({ from: clubsRoute.id })
+  const search = useSearch({ from: clubsRoute.id })
 
   const { data, error, isLoading } = useClubsQuery(search)
   const clubs = data?._embedded?.clubs

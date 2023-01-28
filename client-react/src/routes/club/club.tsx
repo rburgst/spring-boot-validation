@@ -1,12 +1,11 @@
 import { FC } from 'react'
 import { useQuery } from 'react-query'
 import { fetchClub } from '../../api/api'
-import { useMatch } from '@tanstack/react-router'
-import { clubEditRoute, clubRoute } from '../../main'
+import { Link, useParams } from '@tanstack/react-router'
+import { clubEditRoute, clubRoute } from '../../router'
 
 export const ClubPage: FC = () => {
-  const { params, Link } = useMatch(clubRoute.id)
-  const { clubId } = params
+  const { clubId } = useParams({ from: clubRoute.id })
   const { data, error, isLoading } = useQuery(['clubs', clubId], () =>
     fetchClub(clubId)
   )
@@ -14,7 +13,7 @@ export const ClubPage: FC = () => {
   return (
     <div>
       <h3>Club Page </h3>
-      {isLoading && <span>Loading…</span>}
+      {isLoading ? <span>Loading…</span> : null}
       {data && (
         <>
           <ul>
@@ -22,7 +21,11 @@ export const ClubPage: FC = () => {
             <li>clubName: {data.clubName}</li>
             <li>managerEmail: {data.managerEmail}</li>
           </ul>
-          <Link to={clubEditRoute.id} params={{ clubId: data.id }}>
+          <Link
+            to={clubEditRoute.id}
+            params={{ clubId: data.id! }}
+            search={undefined}
+          >
             Edit
           </Link>
         </>
