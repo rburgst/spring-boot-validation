@@ -1,5 +1,5 @@
 import React, { FC, ReactNode, useCallback, useRef, useState } from 'react'
-import { useMatch, useParams } from '@tanstack/react-router'
+import { useParams } from '@tanstack/react-router'
 import { useMutation, useQuery } from 'react-query'
 import { fetchClub, updateClub } from '../../api/api'
 import { useForm } from 'react-hook-form'
@@ -26,13 +26,17 @@ export const ClubEditPage: FC = () => {
     handleSubmit,
     register,
     setError,
-  } = useForm({ defaultValues: data, resolver: zodResolver(ClubSchema) })
+  } = useForm({
+    defaultValues: data,
+    resolver: zodResolver(ClubSchema),
+    mode: 'onBlur',
+  })
 
   const [serverErrors, setServerErrors] = useState<string | undefined>(
     undefined
   )
 
-  const toastRef = useRef<Toast>()
+  const toastRef = useRef<Toast>(null)
   const mutation = useMutation(updateClub, {
     onMutate: _variables => {
       setServerErrors(undefined)

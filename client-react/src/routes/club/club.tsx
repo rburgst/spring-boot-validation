@@ -1,7 +1,7 @@
 import React, { FC } from 'react'
 import { useQuery } from 'react-query'
 import { fetchClub } from '../../api/api'
-import { useNavigate, useParams } from '@tanstack/react-router'
+import { Link, useNavigate, useParams } from '@tanstack/react-router'
 import { clubEditRoute, clubRoute } from '../../router'
 import {
   Breadcrumbs,
@@ -11,7 +11,7 @@ import {
   DynamicPageTitle,
   FlexBox,
   Label,
-  Link,
+  Link as FioriLink,
   ObjectPage,
   ObjectStatus,
 } from '@ui5/webcomponents-react'
@@ -30,13 +30,13 @@ export const ClubPage: FC = () => {
         <DynamicPageHeader>
           <FlexBox alignItems="Center" wrap="Wrap">
             <FlexBox direction="Column">
-              <Link>+33 6 4512 5158</Link>
-              <Link href="mailto:ui5-webcomponents-react@sap.com">
+              <FioriLink>+33 6 4512 5158</FioriLink>
+              <FioriLink href="mailto:ui5-webcomponents-react@sap.com">
                 DeniseSmith@sap.com
-              </Link>
-              <Link href="https://github.com/SAP/ui5-webcomponents-react">
+              </FioriLink>
+              <FioriLink href="https://github.com/SAP/ui5-webcomponents-react">
                 https://github.com/SAP/ui5-webcomponents-react
-              </Link>
+              </FioriLink>
             </FlexBox>
             <FlexBox direction="Column" style={{ padding: '10px' }}>
               <Label>San Jose</Label>
@@ -79,20 +79,22 @@ export const ClubPage: FC = () => {
         </DynamicPageTitle>
       }
     >
-      <h3>Club Page </h3>
-      {isLoading ? <span>Loading…</span> : null}
-      {data && (
-        <>
-          <ul>
-            <li>id: {data.id}</li>
-            <li>clubName: {data.clubName}</li>
-            <li>managerEmail: {data.managerEmail}</li>
-          </ul>
-          <Link to={clubEditRoute.id} params={{ clubId: data.id }}>
-            Edit
-          </Link>
-        </>
-      )}
+      <>
+        <h3>Club Page </h3>
+        {isLoading ? <span>Loading…</span> : null}
+        {data && (
+          <>
+            <ul>
+              <li>id: {data.id}</li>
+              <li>clubName: {data.clubName}</li>
+              <li>managerEmail: {data.managerEmail}</li>
+            </ul>
+            <Link to={clubEditRoute.id} params={{ clubId: data.id! }}>
+              Edit
+            </Link>
+          </>
+        )}
+      </>
     </ObjectPage>
   )
 }
