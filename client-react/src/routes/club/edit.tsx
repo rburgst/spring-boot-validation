@@ -1,5 +1,5 @@
 import React, { FC, ReactNode, useCallback, useRef, useState } from 'react'
-import { useMatch } from '@tanstack/react-router'
+import { useMatch, useParams } from '@tanstack/react-router'
 import { useMutation, useQuery } from 'react-query'
 import { fetchClub, updateClub } from '../../api/api'
 import { useForm } from 'react-hook-form'
@@ -11,11 +11,10 @@ import { classNames } from 'primereact/utils'
 import { InputText } from 'primereact/inputtext'
 import { Card } from 'primereact/card'
 import { Toast } from 'primereact/toast'
-import { clubEditRoute } from '../../main'
+import { clubEditRoute } from '../../router'
 
 export const ClubEditPage: FC = () => {
-  const { params } = useMatch(clubEditRoute.id)
-  const { clubId } = params
+  const { clubId } = useParams({ from: clubEditRoute.id })
   const { data } = useQuery(
     ['clubs', clubId],
     () => fetchClub(clubId ?? 'N/A'),

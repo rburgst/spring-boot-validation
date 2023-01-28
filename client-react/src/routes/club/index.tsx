@@ -1,14 +1,14 @@
 import React, { FC, useState } from 'react'
 // import {Club} from '../model/model'
 // import {fetchClubs} from '../api/api'
-import { useMatch, useRouter } from '@tanstack/react-router'
+import { useNavigate, useSearch } from '@tanstack/react-router'
 import { useQuery } from 'react-query'
-import { ClubsResponse, fetchClubs } from '../../api/api'
+import { fetchClubs } from '../../api/api'
 import { Column } from 'primereact/column'
 import { DataTable } from 'primereact/datatable'
 import { Message } from 'primereact/message'
 import { Club, ClubSort } from '../../model/model'
-import { clubRoute, clubsRoute } from '../../main'
+import { clubRoute, clubsRoute } from '../../router'
 import {
   Badge,
   Breadcrumbs,
@@ -19,9 +19,6 @@ import {
   DynamicPageTitle,
   FlexBox,
   Label,
-  Link,
-  ObjectPage,
-  ObjectPageSection,
   ObjectStatus,
   Title,
 } from '@ui5/webcomponents-react'
@@ -54,7 +51,8 @@ function useClubsQuery(search: UseClubsQueryParams) {
 const rowsPerPageOptions = [2, 5, 10, 20]
 
 export const ClubListPage: FC = () => {
-  const { search, navigate } = useMatch(clubsRoute.id)
+  const navigate = useNavigate({ from: clubsRoute.id })
+  const search = useSearch({ from: clubsRoute.id })
 
   const { data, error, isLoading } = useClubsQuery(search)
   const clubs = data?._embedded?.clubs
