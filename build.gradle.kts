@@ -14,21 +14,31 @@ configurations {
     }
 }
 
+
 repositories {
     mavenCentral()
 }
+
+var queryDslVersion = dependencyManagement.importedProperties["querydsl.version"]
 
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter-actuator")
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("org.springframework.boot:spring-boot-starter-data-rest")
     implementation("org.springframework.boot:spring-boot-starter-validation")
-    implementation("com.github.f4b6a3:tsid-creator:5.0.2")
     implementation("com.github.f4b6a3:ulid-creator:5.1.0")
+
+    implementation("com.querydsl:querydsl-jpa:${queryDslVersion}:jakarta")
+    implementation("com.querydsl:querydsl-core:${queryDslVersion}")
+    implementation("jakarta.persistence:jakarta.persistence-api")
+
+    annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
+    annotationProcessor("org.projectlombok:lombok")
+    annotationProcessor("com.querydsl:querydsl-apt:${queryDslVersion}:general")
 
     compileOnly("org.projectlombok:lombok")
     runtimeOnly("com.h2database:h2")
-    annotationProcessor("org.projectlombok:lombok")
+
     testImplementation("org.springframework.boot:spring-boot-starter-test")
 }
 

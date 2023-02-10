@@ -1,6 +1,7 @@
 package com.example.springbootvalidation.club;
 
 import com.example.springbootvalidation.util.KeyGenerator;
+import com.querydsl.core.annotations.QueryEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -20,6 +21,7 @@ import org.hibernate.validator.constraints.Length;
 import java.util.Objects;
 
 @Entity
+@QueryEntity
 @Table(uniqueConstraints = {
         @UniqueConstraint(name = "clubNameUnique", columnNames = {"clubName"})
 })
