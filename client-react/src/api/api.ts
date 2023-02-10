@@ -1,5 +1,13 @@
 import { Club, ClubSort, SortCriterium } from '../model/model'
 import { useQuery } from 'react-query'
+import { z } from 'zod'
+
+export const ClubFilterSchema = z.object({
+  clubName: z.string().nullish().default(null),
+  managerEmail: z.string().nullish().default(null),
+})
+
+export type ClubFilter = z.infer<typeof ClubFilterSchema>
 
 export interface PageResponseInfo {
   size: number
@@ -19,7 +27,7 @@ export function useClubsQuery(
   pageNum: number,
   pageSize: number,
   sort?: SortCriterium<ClubSort>,
-  filter?: any
+  filter?: ClubFilter
 ) {
   return useQuery({
     queryKey: ['clubs', { sort, filter, pageNum, pageSize }],
@@ -31,13 +39,21 @@ export async function fetchClubs(
   pageNum: number,
   pageSize: number,
   sort?: SortCriterium<ClubSort>,
-  _filter?: any
+  filter?: ClubFilter
 ) {
   const queryParams = new URLSearchParams()
   queryParams.append('size', `${pageSize}`)
   queryParams.append('page', `${pageNum}`)
   if (sort) {
     queryParams.append('sort', `${sort.column},${sort.dir}`)
+  }
+  let key: keyof ClubFilter
+  if (filter) {
+    for (key in filter) {
+      if (filter[key]) {
+        queryParams.append(key, filter[key] ?? '')
+      }
+    }
   }
   const result = await fetch(`/api/clubs?${queryParams.toString()}`)
   return await extractJsonOrError<ClubsResponse>(result)
