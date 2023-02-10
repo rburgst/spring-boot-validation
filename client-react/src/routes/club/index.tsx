@@ -6,15 +6,20 @@ import { useNavigate, useSearch } from '@tanstack/react-router'
 import { useClubsQuery } from '../../api/api'
 import { clubsRoute } from '../../router'
 import { z } from 'zod'
-import { ClubSort } from '../../model/model'
+import { ClubSchema, ClubSort } from '../../model/model'
 
 const rowsPerPageOptions = [2, 5, 10, 20]
 
 export const ClubPageSearchParams = z.object({
   pageNum: z.number().optional().default(0),
   pageSize: z.number().optional().default(5),
-  sort: z.string().optional().default('clubName'),
-  dir: z.enum(['asc', 'desc']).optional().default('asc'),
+  sort: z
+    .object({
+      column: ClubSchema.keyof(),
+      dir: z.enum(['asc', 'desc']),
+    })
+    .optional()
+    .default({ column: 'clubName', dir: 'asc' }),
 })
 
 export const ClubListPage: FC = () => {
@@ -22,8 +27,7 @@ export const ClubListPage: FC = () => {
   const { data, error, isLoading } = useClubsQuery(
     search.pageNum,
     search.pageSize,
-    [search.sort as ClubSort, search.dir],
-    undefined
+    search.sort
   )
   const clubs = data?._embedded?.clubs
   const rows = search.pageSize
@@ -53,8 +57,10 @@ export const ClubListPage: FC = () => {
               to: clubsRoute.id,
               search: {
                 ...search,
-                sort: e.sortField,
-                dir: e.sortOrder === 1 ? 'asc' : 'desc',
+                sort: {
+                  column: e.sortField as ClubSort,
+                  dir: e.sortOrder === 1 ? 'asc' : 'desc',
+                },
               },
             }).catch(console.error)
           }}
@@ -70,8 +76,8 @@ export const ClubListPage: FC = () => {
           rowsPerPageOptions={rowsPerPageOptions}
           totalRecords={data?.page.totalElements ?? 0}
           first={first}
-          sortField={search.sort}
-          sortOrder={search.dir === 'asc' ? 1 : -1}
+          sortField={search.sort.column}
+          sortOrder={search.sort.dir === 'asc' ? 1 : -1}
           dataKey="id"
         >
           <Column field="id" header="ID" />

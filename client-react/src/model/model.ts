@@ -11,4 +11,4 @@ export type Club = z.infer<typeof ClubSchema>
 export type ClubSort = keyof Club
 
 export type SortDirection = 'asc' | 'desc'
-export type SortCriterium<T> = [key: T, direction: SortDirection]
+export type SortCriterium<T> = { column: T; dir: SortDirection }

@@ -33,13 +33,11 @@ export async function fetchClubs(
   sort?: SortCriterium<ClubSort>,
   _filter?: any
 ) {
-  const sortField = sort?.[0]
-  const dir = sort?.[1]
   const queryParams = new URLSearchParams()
   queryParams.append('size', `${pageSize}`)
   queryParams.append('page', `${pageNum}`)
   if (sort) {
-    queryParams.append('sort', `${sortField},${dir}`)
+    queryParams.append('sort', `${sort.column},${sort.dir}`)
   }
   const result = await fetch(`/api/clubs?${queryParams.toString()}`)
   return await extractJsonOrError<ClubsResponse>(result)
