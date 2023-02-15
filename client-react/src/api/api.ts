@@ -48,11 +48,9 @@ export async function fetchClubs(
     queryParams.append('sort', `${sort.column},${sort.dir}`)
   }
   let key: keyof ClubFilter
-  if (filter) {
-    for (key in filter) {
-      if (filter[key]) {
-        queryParams.append(key, filter[key] ?? '')
-      }
+  for (key in filter) {
+    if (filter?.[key]) {
+      queryParams.append(key, filter?.[key] ?? '')
     }
   }
   const result = await fetch(`/api/clubs?${queryParams.toString()}`)
