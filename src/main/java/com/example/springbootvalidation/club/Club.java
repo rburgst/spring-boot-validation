@@ -48,9 +48,13 @@ public class Club {
     @Length(max = 200)
     String managerEmail;
 
-    public Club(String clubName, String managerEmail) {
+    @Column
+    String city;
+
+    public Club(String clubName, String managerEmail, String city) {
         this.clubName = clubName;
         this.managerEmail = managerEmail;
+        this.city = city;
     }
 
     @Override
