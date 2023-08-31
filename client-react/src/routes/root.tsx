@@ -1,7 +1,7 @@
 import { Link, Outlet } from '@tanstack/react-router'
 import React, { FC } from 'react'
 import styles from './root.module.scss'
-import { clubsRoute, rootRoute } from '../router'
+import { demoRoute, clubsRoute, rootRoute } from '../router'
 
 export const RootLayout: FC = () => {
   return (
@@ -10,6 +10,7 @@ export const RootLayout: FC = () => {
         <nav className={styles.headerNav}>
           <Link to={'/'}>Home</Link>
           <Link to={clubsRoute.id}>Clubs</Link>
+          <Link to={demoRoute.id}>Search Field Demo</Link>
         </nav>
       </header>
       <hr />

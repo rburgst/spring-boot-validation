@@ -16,9 +16,9 @@ export interface PageResponseInfo {
   number: number
 }
 
-export interface ClubsResponse {
+export interface ApiResponse<T> {
   _embedded: {
-    clubs: Club[]
+    clubs: T[]
   }
   page: PageResponseInfo
 }
@@ -35,17 +35,33 @@ export function useClubsQuery(
   })
 }
 
-export async function fetchClubs(
+export function useClubsSearchFieldQuery<T>(
   pageNum: number,
   pageSize: number,
   sort?: SortCriterium<ClubSort>,
   filter?: ClubFilter
+) {
+  return useQuery({
+    queryKey: ['clubsSearchField', { sort, filter, pageNum, pageSize }],
+    queryFn: () => fetchClubs<T>(pageNum, pageSize, sort, filter, 'clubInfo'),
+  })
+}
+
+export async function fetchClubs<T>(
+  pageNum: number,
+  pageSize: number,
+  sort?: SortCriterium<ClubSort>,
+  filter?: ClubFilter,
+  projectionName?: string
 ) {
   const queryParams = new URLSearchParams()
   queryParams.append('size', `${pageSize}`)
   queryParams.append('page', `${pageNum}`)
   if (sort) {
     queryParams.append('sort', `${sort.column},${sort.dir}`)
+  }
+  if (projectionName) {
+    queryParams.append('projection', projectionName)
   }
   let key: keyof ClubFilter
   for (key in filter) {
@@ -54,7 +70,7 @@ export async function fetchClubs(
     }
   }
   const result = await fetch(`/api/clubs?${queryParams.toString()}`)
-  return await extractJsonOrError<ClubsResponse>(result)
+  return await extractJsonOrError<ApiResponse<T>>(result)
 }
 
 async function extractJsonOrError<T>(result: Response): Promise<T> {

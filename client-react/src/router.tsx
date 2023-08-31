@@ -5,6 +5,7 @@ import { ClubPage } from './routes/club/club'
 import { ClubEditPage } from './routes/club/edit'
 import { ReactRouter, RootRoute, Route } from '@tanstack/react-router'
 import { z } from 'zod'
+import { SearchFieldDemoPage } from './routes/demo'
 
 export const rootRoute = new RootRoute({
   component: RootLayout,
@@ -15,6 +16,13 @@ const homeRoute = new Route({
   path: '/',
   component: IndexPage,
 })
+
+export const demoRoute = new Route({
+  getParentRoute: () => rootRoute,
+  path: '/demo',
+  component: SearchFieldDemoPage,
+})
+
 export const clubsRoute = new Route({
   getParentRoute: () => rootRoute,
   path: '/clubs',
@@ -37,6 +45,7 @@ const routeTree = rootRoute.addChildren([
   clubEditRoute,
   clubRoute,
   clubsRoute,
+  demoRoute,
   homeRoute,
 ])
 
