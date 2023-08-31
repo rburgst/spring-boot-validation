@@ -50,6 +50,7 @@ export const ClubSearch: FunctionComponent<ClubSearchProps> = ({
   const [matchedClubs, setMatchedClubs] = useState<ClubInfo[] | undefined>(
     responseClubs ?? []
   )
+
   useEffect(() => {
     setMatchedClubs(responseClubs ?? [])
     const haveSearchInput =

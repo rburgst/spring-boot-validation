@@ -1,6 +1,7 @@
 import React, { FC, useState } from 'react'
 import { ClubInfo } from '../../model/model'
 import { ClubSearch } from './club-search'
+import { ClubSelect } from './club-select'
 
 export const SearchFieldDemoPage: FC = () => {
   const [selectedClub, setSelectedClub] = useState<ClubInfo | undefined>(
@@ -12,7 +13,7 @@ export const SearchFieldDemoPage: FC = () => {
   }
   return (
     <div>
-      <ClubSearch onClubSelected={onClubSelected} initialClub={selectedClub} />
+      <ClubSelect onClubSelected={onClubSelected} initialClub={selectedClub} />
 
       <li>
         selected club: <pre>{JSON.stringify(selectedClub, null, 2)}</pre>
