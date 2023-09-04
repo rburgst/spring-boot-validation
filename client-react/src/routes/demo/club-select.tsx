@@ -107,11 +107,13 @@ export const ClubSelect: FunctionComponent<ClubSelectProps> = ({
 
   return (
     <div>
+      <h3>React select sync</h3>
       <ul>
         <li>search term: {searchTerm}</li>
         <li>searchTermDebounced: {searchTermDebounced}</li>
         <li>selected club: {selectedClub?.clubName ?? 'no club selected'}</li>
       </ul>
+
       <Select
         components={{ Option: ClubTemplate }}
         placeholder={'search club'}
@@ -128,7 +130,6 @@ export const ClubSelect: FunctionComponent<ClubSelectProps> = ({
         onMenuOpen={() => setMenuIsOpen(true)}
         onMenuClose={() => setMenuIsOpen(false)}
         menuIsOpen={menuIsOpen}
-        autoFocus
         isSearchable={true}
         isClearable={true}
         backspaceRemovesValue={true}

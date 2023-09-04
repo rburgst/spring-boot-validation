@@ -70,7 +70,10 @@ export async function fetchClubs<T>(
     }
   }
   const result = await fetch(`/api/clubs?${queryParams.toString()}`)
-  return await extractJsonOrError<ApiResponse<T>>(result)
+  const finalResult = await extractJsonOrError<ApiResponse<T>>(result)
+  return new Promise<ApiResponse<T>>(resolve => {
+    setTimeout(() => resolve(finalResult), 1000)
+  })
 }
 
 async function extractJsonOrError<T>(result: Response): Promise<T> {
